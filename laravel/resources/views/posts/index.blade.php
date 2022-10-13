@@ -13,9 +13,9 @@
                         <ul class="post_list">
                             <li><div class="row">
                               <div class="colmd-3">
-                                @if(isset($post->user->icon))
+                                @if(isset($post->user->icon->file_name))
                                   <span>
-                                    <img src="{{ '/storage/img/icon/' . $post->user->icon }}" alt="">
+                                    <img src="{{ '/storage/img/icon/' . $post->user->icon->file_name }}" alt="">
                                   </span>
                                 @endif
                                 <span>{{ $post->created_at }}　{{ $post->user->your_name }}</span>

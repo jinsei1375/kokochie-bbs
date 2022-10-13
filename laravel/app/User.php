@@ -46,6 +46,9 @@ class User extends Authenticatable
     public function likes() {
         return $this->hasMany('App\Models\Like');
     }
+    public function icon(){
+        return $this->hasOne('App\Models\Icon');
+    }
     public function favorites()
     {
         return $this->belongsToMany('App\Models\Post')->withTimestamps();

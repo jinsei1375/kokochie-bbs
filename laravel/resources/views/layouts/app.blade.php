@@ -52,10 +52,10 @@
                             @endif
                         @else
                             <li class="nav-item dropdown row">
-                                @if(isset(Auth::user()->icon))
+                                @if(isset(Auth::user()->icon->file_name))
                                     <div class="nav-icon">
                                         <a href="{{ route('icon.edit', Auth::user()->id ) }}">
-                                            <img src="{{ '/storage/img/icon/' . Auth::user()->icon }}" alt="">
+                                            <img src="{{ '/storage/img/icon/' . Auth::user()->icon->file_name }}" alt="">
                                         </a>
                                     </div>
                                 @endif

@@ -5,18 +5,27 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
         <div class="col-10 col-md-8 offset-1 offset-md-2 mb-5">
-          @if(!isset(Auth::user()->icon))
+          @if(!isset(Auth::user()->icon->file_name))
             アイコン登録
             <form action="{{ route('icon.store') }}" method="post" enctype="multipart/form-data">
               {{ csrf_field() }}
               <input type="file" name="icon">
               <input type="submit" value="保存" class="btn btn-primary">
             </form>
+            @if ($errors->any())
+              <div class="alert alert-danger">
+                  <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+                  </ul>
+              </div>
+            @endif
           @else
             <div class="icon-wrap">
-              <img src="{{ '/storage/img/icon/' . Auth::user()->icon }}" alt="">
+              <img src="{{ '/storage/img/icon/' . Auth::user()->icon->file_name }}" alt="">
             </div>
-            <a href="{{ route('icon.edit', Auth::user()->id ) }}" class="btn btn-primary">アイコン変更</a>
+            <a href="{{ route('icon.edit', Auth::user()->icon->id ) }}" class="btn btn-primary">アイコン変更</a>
           @endif
         </div>
           <div class="col-10 col-md-8 offset-1 offset-md-2">
