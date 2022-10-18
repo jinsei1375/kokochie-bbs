@@ -24,6 +24,17 @@ li {
   color: #fff;
   background-color: #38c172;
   border-color: #38c172;
+  &:hover{
+    color: #fff;
+  }
+}
+.btn-teal {
+  color: #fff;
+  background-color: #4dc0b5;
+  border-color: #4dc0b5;
+  &:hover{
+    color: #fff;
+  }
 }
 
 #app {

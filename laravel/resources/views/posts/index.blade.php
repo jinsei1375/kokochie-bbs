@@ -50,12 +50,13 @@
                             <li class="commets-list">
                               <ul>
                               @foreach ($post->comments as $comment)
+
                                 <li>
                                   <div class="row">
                                     <div class="colmd-3">
-                                      @if(isset($comment->user->icon))
+                                      @if(isset($comment->user->icon->file_name))
                                         <span>
-                                          <img src="{{ '/storage/img/icon/' . $comment->user->icon }}" alt="">
+                                          <img src="{{ '/storage/img/icon/' . $comment->user->icon->file_name }}" alt="">
                                         </span>
                                       @endif
                                       <span>{{ $comment->created_at }}　{{ $comment->user->your_name}}さんからのコメント</span>
@@ -69,55 +70,18 @@
                                       <input type="submit" value="削除" class="btn btn-danger comment_del_btn" onclick="Check()"> 
                                     </form>
                                   @endif
-                                  <ul>
-                                    <li>
-                                      @Auth
-                                      <div class="">
-                                          <form action="{{ route('reply.store') }}" method="POST">
-                                          {{ csrf_field() }}
-                                          @method('POST')
-                                              <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                              <input type="hidden" name="reply_id" value="{{ $comment->id }}"  class="fas btn btn-primary">
-                                              <input type="submit" value="返信する"  class="fas btn btn-green">
-                                          </form>
-                                      </div>
-                                      @endAuth
-                                    </li>
-                                      @foreach($comment->replies as $reply)
-                                        <li class="reply_list">
-                                            <div class="row">
-                                              <div class="colmd-3">
-                                                @if(isset($reply->user->icon))
-                                                  <span>
-                                                    <img src="{{ '/storage/img/icon/' . $reply->user->icon }}" alt="">
-                                                  </span>
-                                                @endif
-                                                <span>{{ $reply->created_at }}　{{ $reply->user->your_name}}さんからの返信</span>
-                                              </div>
-                                            </div>
-                                            <p>{{ $reply->content }}</p>
-                                            @Auth
-                                              <div class="">
-                                                  <form action="{{ route('reply.store') }}" method="POST">
-                                                  {{ csrf_field() }}
-                                                  @method('POST')
-                                                      <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                                      <input type="hidden" name="reply_id" value="{{ $reply->id }}"  class="fas btn btn-primary">
-                                                      <input type="submit" value="返信する"  class="fas btn btn-green">
-                                                  </form>
-                                              </div>
-                                            @endAuth
-                                            @if($reply->user->id == Auth::id())
-                                              <form action="{{ route('reply.destroy', $reply->id) }}" method="POST">
-                                                {{ csrf_field() }}
-                                                @method('DELETE')
-                                                <input type="submit" value="削除" class="btn btn-danger comment_del_btn" onclick="Check()"> 
-                                              </form>
-                                            @endif
-                                            
-                                        </li>
-                                      @endforeach
-                                  </ul>
+                                  @Auth
+                                    <div class="">
+                                      <form action="{{ route('comments.store') }}" method="POST">
+                                      {{ csrf_field() }}
+                                      @method('POST')
+                                          <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                          <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                                          <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                          <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
+                                      </form>
+                                    </div>
+                                  @endAuth
                                 </li>
                               @endforeach
                               </ul>

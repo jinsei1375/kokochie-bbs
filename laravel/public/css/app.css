@@ -19418,6 +19418,20 @@ li::marker {
   border-color: #38c172;
 }
 
+.btn-green:hover {
+  color: #fff;
+}
+
+.btn-teal {
+  color: #fff;
+  background-color: #4dc0b5;
+  border-color: #4dc0b5;
+}
+
+.btn-teal:hover {
+  color: #fff;
+}
+
 #app .container ul.post_list {
   padding: 0;
   border-bottom: 1px solid #ccc;

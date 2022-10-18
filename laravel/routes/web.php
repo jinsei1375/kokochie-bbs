@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth']], function () {
   // コメント
   Route::resource('/comments', 'CommentController'); 
   // コメントに対する返信
-  Route::resource('/reply', 'ReplyController', ['only' => ['store', 'destroy']]); 
+  // Route::resource('/reply', 'ReplyController', ['only' => ['store', 'destroy']]); 
 
   // アイコン
   Route::resource('/icon', 'IconController', ['only' => ['store', 'update', 'edit']]);

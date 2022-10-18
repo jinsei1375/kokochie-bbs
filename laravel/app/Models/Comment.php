@@ -16,4 +16,18 @@ class Comment extends Model
     public function replies() {
         return $this->hasMany('App\Models\Reply');
     }
+
+    // public function getRelatedComment($id)
+    // {
+    //     $relatedComments = Comment::where('parent_comment_id', '=', $id)->get();
+    //     if(!$relatedComments){
+    //         $list = '<ul>'
+    //         foreach($relatedComments as $relatedComment) {
+    //             $list .= '<li>' $relatedComment->user->name . '<br>' . $relatedComment->cotent . '</li>';
+    //             $relatedComment->getRelatedComment($relatedComment->id);
+    //         }
+    //         return $list;
+    //     }
+    //     return false;
+    // }
 }

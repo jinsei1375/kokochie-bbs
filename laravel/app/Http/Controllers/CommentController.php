@@ -44,6 +44,7 @@ class CommentController extends Controller
         $comments->content = $request->content;
         $comments->user_id = $id;
         $comments->post_id = $request->post_id;
+        $comments->parent_comment_id = $request->parent_comment_id;
 
         $comments->save();
 
@@ -97,6 +98,15 @@ class CommentController extends Controller
         $comment->delete();
 
         return redirect()->to('/posts');
+    }
+
+    public function getRelatedComment($id)
+    {
+        $relatedComments = Comment::where('parent_comment_id', $id)->get();
+        if(!empty($relatedComments)){
+            return $relatedComments;
+        }
+        return false;
     }
 
 }

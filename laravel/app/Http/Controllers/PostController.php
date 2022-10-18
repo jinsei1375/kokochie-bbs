@@ -146,7 +146,6 @@ class PostController extends Controller
         $postLikesCount = $post->loadCount('likes')->likes_count;
 
         //一つの変数にajaxに渡す値をまとめる
-        //今回ぐらい少ない時は別にまとめなくてもいいけど一応。笑
         $json = [
             'postLikesCount' => $postLikesCount,
         ];
