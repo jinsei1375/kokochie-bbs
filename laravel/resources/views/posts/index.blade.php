@@ -50,64 +50,58 @@
                             <li class="commets-list">
                               <ul>
                               @foreach ($post->comments as $comment)
-
-                                <li>
-                                  <div class="row">
-                                    <div class="colmd-3">
-                                      @if(isset($comment->user->icon->file_name))
-                                        <span>
-                                          <img src="{{ '/storage/img/icon/' . $comment->user->icon->file_name }}" alt="">
-                                        </span>
-                                      @endif
-                                      <span>{{ $comment->created_at }}　{{ $comment->user->your_name}}さんからのコメント</span>
+                                @if (empty($comment->parent_comment_id))
+                                  <li>
+                                    <div class="row">
+                                      <div class="colmd-3">
+                                        @if(isset($comment->user->icon->file_name))
+                                          <span>
+                                            <img src="{{ '/storage/img/icon/' . $comment->user->icon->file_name }}" alt="">
+                                          </span>
+                                        @endif
+                                        <span>{{ $comment->id }}. {{ $comment->created_at }}　{{ $comment->user->your_name}}さんからのコメント</span>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <p>{{ $comment->content }}</p>
-                                  @if($comment->user->id == Auth::id())
-                                    <form action="{{ route('comments.destroy', $comment->id) }}" method="POST">
-                                      {{ csrf_field() }}
-                                      @method('DELETE')
-                                      <input type="submit" value="削除" class="btn btn-danger comment_del_btn" onclick="Check()"> 
-                                    </form>
-                                  @endif
-                                  @Auth
-                                    <div class="">
-                                      <form action="{{ route('comments.store') }}" method="POST">
-                                      {{ csrf_field() }}
-                                      @method('POST')
-                                          <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                          <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
-                                          <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                          <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
+                                    <p>{{ $comment->content }}</p>
+                                    @if($comment->user->id == Auth::id())
+                                      <form action="{{ route('comments.destroy', $comment->id) }}" method="POST">
+                                        {{ csrf_field() }}
+                                        @method('DELETE')
+                                        <input type="submit" value="削除" class="btn btn-danger comment_del_btn" onclick="Check()"> 
                                       </form>
-                                    </div>
-                                  @endAuth
-                                </li>
+                                    @endif
+                                    @Auth
+                                      <div class="">
+                                        <form action="{{ route('comments.store') }}" method="POST">
+                                        {{ csrf_field() }}
+                                        @method('POST')
+                                            <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                            <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                                            <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                            <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
+                                        </form>
+                                      </div>
+                                    @endAuth
+
+                                    @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
+                                      <ul>
+                                        <p>{{ $relatedComment->id }}. {{ $relatedComment->content }}</p>
+                                        <p>←{{ $relatedComment->parent_comment_id }}</p>
+                                        @foreach ($relatedComment->getRelatedComments($relatedComment->id) as $relatedCommentsub)
+                                          <ul>
+                                            <p>{{ $relatedCommentsub->id }}. {{ $relatedCommentsub->content }}</p>
+                                            <p>←{{ $relatedCommentsub->parent_comment_id }}</p>
+                                          </ul>
+                                        @endforeach
+                                      </ul>
+                                    @endforeach
+                                  </li>
+                                @endif
                               @endforeach
                               </ul>
                             </li>
                             <li>
                               <div class="row">
-                                  <!-- @Auth
-                                    @if($post->favoriteusers()->where('user_id', Auth::id())->exists())
-                                      <div class="">
-                                          <form action="{{ route('unfavorites', $post) }}" method="POST">
-                                          {{ csrf_field() }}
-                                              <input type="submit" value="いいね取り消す" class="fas btn btn-danger">
-                                          </form>
-                                      </div>
-                                    @else
-                                      <div class="">
-                                          <form action="{{ route('favorites', $post) }}" method="POST">
-                                          {{ csrf_field() }}
-                                              <input type="submit" value="いいね" class="fas btn btn-success">
-                                          </form>
-                                      </div>
-                                    @endif
-                                  @endAuth -->
-                                  <!-- <div class="">
-                                    <p>いいね数：{{ $post->favoriteusers()->count() }}</p>
-                                  </div> -->
                                   @Auth
                                     @if($like_model->like_exist(Auth::id(),$post->id))
                                       <p class="favorite-marke">

@@ -100,13 +100,18 @@ class CommentController extends Controller
         return redirect()->to('/posts');
     }
 
-    public function getRelatedComment($id)
-    {
-        $relatedComments = Comment::where('parent_comment_id', $id)->get();
-        if(!empty($relatedComments)){
-            return $relatedComments;
-        }
-        return false;
-    }
+    // public function getRelatedComment($id)
+    // {
+    //     $relatedComments = Comment::where('parent_comment_id', '=', $id)->get();
+    //     if(!$relatedComments){
+    //         $list = '<ul>';
+    //         foreach($relatedComments as $relatedComment) {
+    //             $list .= '<li>' . $relatedComment->user->name . '<br>' . $relatedComment->cotent . '</li>';
+    //             $relatedComment->getRelatedComment($relatedComment->id);
+    //         }
+    //         return $list;
+    //     }
+    //     return false;
+    // }
 
 }

@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
 
   // コメント
   Route::resource('/comments', 'CommentController'); 
+  // Route::get('/posts', 'CommentController@getRelatedComment'); 
   // コメントに対する返信
   // Route::resource('/reply', 'ReplyController', ['only' => ['store', 'destroy']]); 
 
