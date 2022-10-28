@@ -18,7 +18,7 @@
                                     <img src="{{ '/storage/img/icon/' . $post->user->icon->file_name }}" alt="">
                                   </span>
                                 @endif
-                                <span>{{ $post->created_at }}　{{ $post->user->your_name }}</span>
+                                <span>{{ $post->id }}. {{ $post->created_at }}　{{ $post->user->your_name }}</span>
                               </div>
                             </li>
                             <li><div class="row"><div class="colmd-3">{{ $post->content }}</div></div></li>
@@ -86,12 +86,7 @@
                                       <ul>
                                         <?php $toCommentId; ?>
                                         @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
-                                          <?php echo $toCommentId; ?>
-                                          @if ($toCommentId = $relatedComment['parent_comment_id'])
-                                            <li class="child-list">
-                                          @else
                                             <li>
-                                          @endif
                                               {{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ
                                               {{ $relatedComment['content'] }}
                                             <?php $toCommentId = $relatedComment['id']; ?>
