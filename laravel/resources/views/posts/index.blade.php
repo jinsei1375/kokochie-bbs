@@ -82,19 +82,37 @@
                                         </form>
                                       </div>
                                     @endAuth
-
-                                    @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
+                                    @if (!empty($comment->getRelatedComments($comment->id)))
                                       <ul>
-                                        <p>{{ $relatedComment->id }}. {{ $relatedComment->content }}</p>
-                                        <p>←{{ $relatedComment->parent_comment_id }}</p>
-                                        @foreach ($relatedComment->getRelatedComments($relatedComment->id) as $relatedCommentsub)
-                                          <ul>
-                                            <p>{{ $relatedCommentsub->id }}. {{ $relatedCommentsub->content }}</p>
-                                            <p>←{{ $relatedCommentsub->parent_comment_id }}</p>
-                                          </ul>
+                                        <?php $toCommentId; ?>
+                                        @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
+                                          <?php echo $toCommentId; ?>
+                                          @if ($toCommentId = $relatedComment['parent_comment_id'])
+                                            <li class="child-list">
+                                          @else
+                                            <li>
+                                          @endif
+                                              {{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ
+                                              {{ $relatedComment['content'] }}
+                                            <?php $toCommentId = $relatedComment['id']; ?>
+                                          @Auth
+                                            <div class="">
+                                              <form action="{{ route('comments.store') }}" method="POST">
+                                              {{ csrf_field() }}
+                                              @method('POST')
+                                                  <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                                  <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
+                                                  <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                                  <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
+                                              </form>
+                                              <?php echo $toCommentId; ?>
+                                            </div>
+                                          @endAuth
+                                          </li>
                                         @endforeach
                                       </ul>
-                                    @endforeach
+                                    @endif
+                                      {{ var_dump($comment->getRelatedComments($comment->id)) }}
                                   </li>
                                 @endif
                               @endforeach
