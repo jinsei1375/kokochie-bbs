@@ -84,30 +84,63 @@
                                     @endAuth
                                     @if (!empty($comment->getRelatedComments($comment->id)))
                                       <ul>
-                                        <?php $toCommentId; ?>
+                                        <?php $beforeCommentId = $comment->id; ?>
+                                        <?php $toCommentId = $comment->id; ?>
                                         @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
+                                          @if( $beforeCommentId == $relatedComment['parent_comment_id'] )
+                                            <ul class="group-list">
+                                              <li>
+                                                {{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ
+                                                {{ $relatedComment['content'] }}
+                                                
+                                                @Auth
+                                                  <div class="">
+                                                    <form action="{{ route('comments.store') }}" method="POST">
+                                                    {{ csrf_field() }}
+                                                    @method('POST')
+                                                        <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
+                                                        <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
+                                                        <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                                        <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
+                                                    </form>
+                                                  </div>
+                                                @endAuth
+                                              </li>
+                                              <?php $beforeCommentId =  $relatedComment['id']; ?>
+                                              <?php $toCommentId = $relatedComment['parent_comment_id']; ?>
+                                              <?php echo '前のコメントID' . $beforeCommentId; ?>
+                                              <?php echo 'to' . $toCommentId; ?>
+                                              
+                                          @else
+                                            @if ($relatedComment['parent_comment_id'] != $toCommentId)
+                                              </ul>
+                                            @endif
                                             <li>
                                               {{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ
                                               {{ $relatedComment['content'] }}
-                                            <?php $toCommentId = $relatedComment['id']; ?>
-                                          @Auth
-                                            <div class="">
-                                              <form action="{{ route('comments.store') }}" method="POST">
-                                              {{ csrf_field() }}
-                                              @method('POST')
+                                              
+                                              @Auth
+                                              <div class="">
+                                                <form action="{{ route('comments.store') }}" method="POST">
+                                                  {{ csrf_field() }}
+                                                  @method('POST')
                                                   <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
                                                   <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
                                                   <input type="hidden" name="post_id" value="{{ $post->id }}">
                                                   <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
-                                              </form>
-                                              <?php echo $toCommentId; ?>
-                                            </div>
-                                          @endAuth
-                                          </li>
+                                                </form>
+                                              </div>
+                                              @endAuth
+                                            </li>
+                                            <?php $beforeCommentId =  $relatedComment['id']; ?>
+                                              <?php echo '前のコメントID' . $beforeCommentId; ?>
+                                              <?php echo 'to' . $toCommentId; ?>
+                                          @endif
+                                                
                                         @endforeach
                                       </ul>
                                     @endif
-                                      {{ var_dump($comment->getRelatedComments($comment->id)) }}
+
                                   </li>
                                 @endif
                               @endforeach

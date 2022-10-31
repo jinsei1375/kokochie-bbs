@@ -21,15 +21,16 @@ class Comment extends Model
     // 投稿に対するコメント取得（子コメント全て取得）
     public function getRelatedComments($id)
     {
-        $relatedCommentsArry = [];
         $relatedCommentsArry = Comment::where('parent_comment_id', '=', $id)->get()->toArray();
 
         if(!empty($relatedCommentsArry)){
             foreach ($relatedCommentsArry as $relatedComment) {
-                $relatedCommentModel = Comment::where('id', '=', $relatedComment['id'])->first();
+
+                // 配列に入れる順番を取得（親のコメントの次に入れたい）
                 $arryNum = array_search($relatedComment, $relatedCommentsArry) + 1;
-                // $relatedCommentsArry = array_merge($relatedCommentsArry, Comment::where('parent_comment_id', '=', $relatedCommentModel->id)->get()->toArray());
-                array_splice($relatedCommentsArry, $arryNum, 0, Comment::where('parent_comment_id', '=', $relatedCommentModel->id)->get()->toArray());
+
+                // 配列に入れる
+                array_splice($relatedCommentsArry, $arryNum, 0, Comment::where('parent_comment_id', '=', $relatedComment['id'])->get()->toArray());
             }
             return $relatedCommentsArry;
         }
