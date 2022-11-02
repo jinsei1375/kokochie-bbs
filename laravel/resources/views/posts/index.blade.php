@@ -50,6 +50,7 @@
                             <li class="commets-list">
                               <ul>
                               @foreach ($post->comments as $comment)
+                               
                                 @if (empty($comment->parent_comment_id))
                                   <li>
                                     <div class="row">
@@ -83,6 +84,7 @@
                                       </div>
                                     @endAuth
                                     @if (!empty($comment->getRelatedComments($comment->id)))
+                                      
                                       <ul>
                                         <?php $beforeCommentId = $comment->id; ?>
                                         <?php $toCommentId = $comment->id; ?>
@@ -136,13 +138,12 @@
                                               <?php echo '前のコメントID' . $beforeCommentId; ?>
                                               <?php echo 'to' . $toCommentId; ?>
                                           @endif
-                                                
-                                        @endforeach
-                                      </ul>
-                                    @endif
-
-                                  </li>
-                                @endif
+                                          @endforeach
+                                        </ul>
+                                        @endif
+                                        
+                                      </li>
+                                      @endif
                               @endforeach
                               </ul>
                             </li>
