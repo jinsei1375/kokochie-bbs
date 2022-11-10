@@ -78,13 +78,13 @@
                                         @method('POST')
                                             <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
                                             <input type="hidden" name="parent_comment_id" value="{{ $comment->id }}">
+                                            <input type="hidden" name="base_comment_id" value="{{ $comment->id }}">
                                             <input type="hidden" name="post_id" value="{{ $post->id }}">
                                             <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
                                         </form>
                                       </div>
                                     @endAuth
                                     @if (!empty($comment->getRelatedComments($comment->id)))
-                                      
                                       <ul>
                                         <?php $beforeCommentId = $comment->id; ?>
                                         <?php $toCommentId = $comment->id; ?>
@@ -102,6 +102,7 @@
                                                     @method('POST')
                                                         <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
                                                         <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
+                                                        <input type="hidden" name="base_comment_id" value="{{ $comment->id }}">
                                                         <input type="hidden" name="post_id" value="{{ $post->id }}">
                                                         <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
                                                     </form>
@@ -128,6 +129,7 @@
                                                   @method('POST')
                                                   <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
                                                   <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
+                                                  <input type="hidden" name="base_comment_id" value="{{ $comment->id }}">
                                                   <input type="hidden" name="post_id" value="{{ $post->id }}">
                                                   <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
                                                 </form>
