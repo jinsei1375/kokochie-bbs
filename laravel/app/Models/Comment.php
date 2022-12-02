@@ -31,7 +31,7 @@ class Comment extends Model
                 
                 $childCommentsArryBase = [];
                 
-                // 配列に存在してなければ追加
+                // 配列に存在してなければ追加（重複チェック）
                 if(!in_array($relatedComment, $sortArry)){
                     array_push($sortArry, $relatedComment);
                 }
@@ -39,7 +39,7 @@ class Comment extends Model
                 // 配列に入れる順番を取得（親のコメントの次に入れるため）
                 $arryNum = array_search($relatedComment, $sortArry) + 1;
                 
-                // 直下の子コメントを配列に
+                // 子コメントを配列に置き換え
                 $childCommentsArry = Comment::where('parent_comment_id', '=', $relatedComment['id'])->get()->toArray();
 
                 // 直下の子コメントを配列に$sortArryに追加（重複チェック）

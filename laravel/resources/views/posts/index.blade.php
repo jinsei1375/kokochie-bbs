@@ -86,11 +86,11 @@
                                       @endAuth
 
                                       @if (!empty($comment->getRelatedComments($comment->id)))
-                                        <?php //var_dump($comment->getRelatedComments($comment->id));?> 
+                                        <?php var_dump($comment->getRelatedComments($comment->id));?> 
                                         <ul>
                                           <?php $beforeCommentId = $comment->id;
                                                 $toCommentId = $comment->id;
-                                                $kaiso = 0;
+                                                $level = 0;
                                           ?>
                                           @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
                                             @if( $beforeCommentId == $relatedComment['parent_comment_id'] )
@@ -116,18 +116,18 @@
                                                 <?php 
                                                   $beforeCommentId =  $relatedComment['id'];
                                                   $toCommentId = $relatedComment['parent_comment_id']; 
-                                                  $kaiso += 1;
+                                                  $level += 1;
                                                 ?>
-                                                <?php //echo $beforeCommentId; ?>
+                                                <?php echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
                                             @else
                                               @if ($relatedComment['parent_comment_id'] != $toCommentId)
                                                 <?php 
-                                                  echo $kaiso; 
-                                                  for($i=0; $i< ($kaiso - 1); $i++){
-                                                    echo '</ul>';
-                                                  }
+                                                  //for($i=0; $i< ($level - 1); $i++){
+                                                  //  echo '</ul>';
+                                                  //}
+                                                  //$level = 1;
                                                   ?>
-                                                <?php $kaiso = 1;?>
+                                                  </ul>
                                               @else
 
                                               @endif
@@ -150,6 +150,7 @@
                                                 @endAuth
                                               </li>
                                               <?php $beforeCommentId =  $relatedComment['id']; ?>
+                                              <?php echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
                                               <?php //echo $beforeCommentId; ?>
                                             @endif
                                             @endforeach
