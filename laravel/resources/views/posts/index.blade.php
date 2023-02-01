@@ -129,13 +129,14 @@
                                                     if($vals[0] == $relatedComment['parent_comment_id']){
                                                       $level = $vals[1] + 1;
                                                       break;
+                                                    }else {
+                                                      $level = 1;
                                                     }
                                                   }
                                                   $endUL = $beforeLevel - $level;
                                                   for($i=0; $i<$endUL; $i++){
                                                     echo '</ul>';
                                                   }
-
                                                   ?>
                                               @endif
                                               <?php
@@ -160,17 +161,18 @@
                                                 @endAuth
                                               </li>
                                               <?php $beforeCommentId =  $relatedComment['id']; ?>
-                                              <?php //echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
-                                              <?php //echo $beforeCommentId; ?>
+                                              <?php echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
                                             @endif
                                             @endforeach
                                           </ul>
                                             <?php
                                               foreach($commentLevelArray as $vals){
-                                                echo $vals[0] . '→' . $vals[1];
-                                                echo '<br>';
+                                                //echo $vals[0] . '→' . $vals[1];
+                                                //echo '<br>';
                                               }
+                                              //var_dump($comment->getRelatedComments($comment->id));
                                             ?>
+
                                       @endif
                                           
                                     </li>
