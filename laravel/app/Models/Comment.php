@@ -30,9 +30,12 @@ class Comment extends Model
             foreach ($relatedCommentsArry as $relatedComment) {
                 
                 $childCommentsArryBase = [];
+
+                // 親コメント所得
+                $parentComment = Comment::where('id', '=', $relatedComment['parent_comment_id'])->get()->toArray();
                 
-                // 配列に存在してなければ追加（重複チェック）
-                if(!in_array($relatedComment, $sortArry)){
+                // 重複チェックと親コメントが存在しているかチェック
+                if(!in_array($relatedComment, $sortArry) && !empty($parentComment)){
                     array_push($sortArry, $relatedComment);
                 }
                 

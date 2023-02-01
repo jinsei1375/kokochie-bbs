@@ -86,16 +86,23 @@
                                       @endAuth
 
                                       @if (!empty($comment->getRelatedComments($comment->id)))
-                                        <?php var_dump($comment->getRelatedComments($comment->id));?> 
+                                        <?php //var_dump($comment->getRelatedComments($comment->id));?> 
                                         <ul>
                                           <?php $beforeCommentId = $comment->id;
                                                 $toCommentId = $comment->id;
                                                 $level = 0;
+                                                $commentLevelArray = [];
                                           ?>
                                           @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
                                             @if( $beforeCommentId == $relatedComment['parent_comment_id'] )
                                               <ul class="group-list">
-                                                <li>
+                                                <?php 
+                                                  $beforeCommentId =  $relatedComment['id'];
+                                                  $toCommentId = $relatedComment['parent_comment_id']; 
+                                                  $level += 1;
+                                                  $commentLevelArray[] = [$relatedComment['id'], $level];
+                                                ?>
+                                                <li class="<?php echo $level; ?>" id="{{ $relatedComment['parent_comment_id'] }}">
                                                   <p>{{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ</p>
                                                   <p>{{ $relatedComment['content'] }}</p>
                                                   
@@ -113,25 +120,28 @@
                                                     </div>
                                                   @endAuth
                                                 </li>
-                                                <?php 
-                                                  $beforeCommentId =  $relatedComment['id'];
-                                                  $toCommentId = $relatedComment['parent_comment_id']; 
-                                                  $level += 1;
-                                                ?>
-                                                <?php echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
+                                                <?php //echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
                                             @else
                                               @if ($relatedComment['parent_comment_id'] != $toCommentId)
                                                 <?php 
-                                                  //for($i=0; $i< ($level - 1); $i++){
-                                                  //  echo '</ul>';
-                                                  //}
-                                                  //$level = 1;
-                                                  ?>
-                                                  </ul>
-                                              @else
+                                                  $beforeLevel = $level;
+                                                  foreach($commentLevelArray as $vals){
+                                                    if($vals[0] == $relatedComment['parent_comment_id']){
+                                                      $level = $vals[1] + 1;
+                                                      break;
+                                                    }
+                                                  }
+                                                  $endUL = $beforeLevel - $level;
+                                                  for($i=0; $i<$endUL; $i++){
+                                                    echo '</ul>';
+                                                  }
 
+                                                  ?>
                                               @endif
-                                              <li>
+                                              <?php
+                                                $commentLevelArray[] = [$relatedComment['id'], $level];
+                                              ?>
+                                              <li class="<?php echo $level; ?>" id="{{ $relatedComment['parent_comment_id'] }}">
                                                 <p>{{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ</p>
                                                 <p>{{ $relatedComment['content'] }}</p>
                                                 
@@ -150,11 +160,17 @@
                                                 @endAuth
                                               </li>
                                               <?php $beforeCommentId =  $relatedComment['id']; ?>
-                                              <?php echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
+                                              <?php //echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
                                               <?php //echo $beforeCommentId; ?>
                                             @endif
                                             @endforeach
-                                        </ul>
+                                          </ul>
+                                            <?php
+                                              foreach($commentLevelArray as $vals){
+                                                echo $vals[0] . '→' . $vals[1];
+                                                echo '<br>';
+                                              }
+                                            ?>
                                       @endif
                                           
                                     </li>
