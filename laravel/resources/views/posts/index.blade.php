@@ -60,7 +60,7 @@
                                               <img src="{{ '/storage/img/icon/' . $comment->user->icon->file_name }}" alt="">
                                             </span>
                                           @endif
-                                          <span>{{ $comment->id }}. {{ $comment->created_at }}　{{ $comment->user->your_name}}さんからのコメント</span>
+                                          <span>{{ $comment->id }} . <span class="text-primary">{{ $comment->post_id }}へのコメント</span>　{{ $comment->created_at }}　{{ $comment->user->your_name}}さんからのコメント</span>
                                         </div>
                                       </div>
                                       <p>{{ $comment->content }}</p>
@@ -103,7 +103,7 @@
                                                   $commentLevelArray[] = [$relatedComment['id'], $level];
                                                 ?>
                                                 <li class="<?php echo $level; ?>" id="{{ $relatedComment['parent_comment_id'] }}">
-                                                  <p>{{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ</p>
+                                                  <p>{{ $relatedComment['id'] }}. <span class="text-primary">{{ $relatedComment['parent_comment_id'] }}へのコメント</span></p>
                                                   <p>{{ $relatedComment['content'] }}</p>
                                                   
                                                   @Auth
@@ -143,7 +143,7 @@
                                                 $commentLevelArray[] = [$relatedComment['id'], $level];
                                               ?>
                                               <li class="<?php echo $level; ?>" id="{{ $relatedComment['parent_comment_id'] }}">
-                                                <p>{{ $relatedComment['id'] }}. {{ $relatedComment['parent_comment_id'] }}へ</p>
+                                                <p>{{ $relatedComment['id'] }}. <span class="text-primary">{{ $relatedComment['parent_comment_id'] }}へのコメント</span></p>
                                                 <p>{{ $relatedComment['content'] }}</p>
                                                 
                                                 @Auth
@@ -161,17 +161,17 @@
                                                 @endAuth
                                               </li>
                                               <?php $beforeCommentId =  $relatedComment['id']; ?>
-                                              <?php echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
+                                              <?php //echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
                                             @endif
-                                            @endforeach
-                                          </ul>
-                                            <?php
-                                              foreach($commentLevelArray as $vals){
-                                                //echo $vals[0] . '→' . $vals[1];
-                                                //echo '<br>';
-                                              }
-                                              //var_dump($comment->getRelatedComments($comment->id));
-                                            ?>
+                                            @if($loop->last)
+                                              <?php
+                                                for($i = 0; $i < $level; $i++){
+                                                  echo '</ul>';
+                                                }
+                                              ?>
+                                            @endif
+                                          @endforeach
+                                        </ul>
 
                                       @endif
                                           
