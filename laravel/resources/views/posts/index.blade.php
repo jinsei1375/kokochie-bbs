@@ -81,99 +81,12 @@
                                               <input type="hidden" name="base_comment_id" value="{{ $comment->id }}">
                                               <input type="hidden" name="post_id" value="{{ $post->id }}">
                                               <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
-                                          </form>
-                                        </div>
-                                      @endAuth
-
-                                      @if (!empty($comment->getRelatedComments($comment->id)))
-                                        <?php //var_dump($comment->getRelatedComments($comment->id));?> 
-                                        <ul>
-                                          <?php $beforeCommentId = $comment->id;
-                                                $toCommentId = $comment->id;
-                                                $level = 0;
-                                                $commentLevelArray = [];
-                                          ?>
-                                          @foreach ($comment->getRelatedComments($comment->id) as $relatedComment)
-                                            @if( $beforeCommentId == $relatedComment['parent_comment_id'] )
-                                              <ul class="group-list">
-                                                <?php 
-                                                  $beforeCommentId =  $relatedComment['id'];
-                                                  $toCommentId = $relatedComment['parent_comment_id']; 
-                                                  $level += 1;
-                                                  $commentLevelArray[] = [$relatedComment['id'], $level];
-                                                ?>
-                                                <li class="<?php echo $level; ?>" id="{{ $relatedComment['parent_comment_id'] }}">
-                                                  <p>{{ $relatedComment['id'] }}. <span class="text-primary">{{ $relatedComment['parent_comment_id'] }}へのコメント</span></p>
-                                                  <p>{{ $relatedComment['content'] }}</p>
-                                                  
-                                                  @Auth
-                                                    <div class="">
-                                                      <form action="{{ route('comments.store') }}" method="POST">
-                                                      {{ csrf_field() }}
-                                                      @method('POST')
-                                                          <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                                          <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
-                                                          <input type="hidden" name="base_comment_id" value="{{ $comment->id }}">
-                                                          <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                                          <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
-                                                      </form>
-                                                    </div>
-                                                  @endAuth
-                                                </li>
-                                                <?php //echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
-                                            @else
-                                              @if ($relatedComment['parent_comment_id'] != $toCommentId)
-                                                <?php 
-                                                  $beforeLevel = $level;
-                                                  foreach($commentLevelArray as $vals){
-                                                    if($vals[0] == $relatedComment['parent_comment_id']){
-                                                      $level = $vals[1] + 1;
-                                                      break;
-                                                    }else {
-                                                      $level = 1;
-                                                    }
-                                                  }
-                                                  $endUL = $beforeLevel - $level;
-                                                  for($i=0; $i<$endUL; $i++){
-                                                    echo '</ul>';
-                                                  }
-                                                  ?>
-                                              @endif
-                                              <?php
-                                                $commentLevelArray[] = [$relatedComment['id'], $level];
-                                              ?>
-                                              <li class="<?php echo $level; ?>" id="{{ $relatedComment['parent_comment_id'] }}">
-                                                <p>{{ $relatedComment['id'] }}. <span class="text-primary">{{ $relatedComment['parent_comment_id'] }}へのコメント</span></p>
-                                                <p>{{ $relatedComment['content'] }}</p>
-                                                
-                                                @Auth
-                                                <div class="">
-                                                  <form action="{{ route('comments.store') }}" method="POST">
-                                                    {{ csrf_field() }}
-                                                    @method('POST')
-                                                    <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="1"></textarea>
-                                                    <input type="hidden" name="parent_comment_id" value="{{ $relatedComment['id'] }}">
-                                                    <input type="hidden" name="base_comment_id" value="{{ $comment->id }}">
-                                                    <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                                    <input type="submit" value="コメントにコメントする"  class="fas btn btn-teal">
-                                                  </form>
-                                                </div>
-                                                @endAuth
-                                              </li>
-                                              <?php $beforeCommentId =  $relatedComment['id']; ?>
-                                              <?php //echo ($level . '/to' . $toCommentId . '/before' . $beforeCommentId); ?>
-                                            @endif
-                                            @if($loop->last)
-                                              <?php
-                                                for($i = 0; $i < $level; $i++){
-                                                  echo '</ul>';
-                                                }
-                                              ?>
-                                            @endif
-                                          @endforeach
-                                        </ul>
-
-                                      @endif
+                                            </form>
+                                          </div>
+                                          @endAuth
+                                      <?php   
+                                        var_dump($comment->getChildRelatedCommentsToArray($comment->id));
+                                      ?>
                                           
                                     </li>
                                   @endif
