@@ -84,10 +84,11 @@
                                             </form>
                                           </div>
                                           @endAuth
+                                      <pre>
                                       <?php   
-                                        var_dump($comment->getChildRelatedCommentsToArray($comment->id));
+                                        print_r($comment->getChildRelatedCommentsToArray($comment->id));
                                       ?>
-                                      
+                                      </pre>
                                     </li>
                                   @endif
                                     
