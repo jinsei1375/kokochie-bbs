@@ -73,6 +73,24 @@ class Comment extends Model
         return $sortArry;
     }
     
+    // 子供のコメント配列を親コメントの後ろに追加
+    public function addChildCommentsArray($targetArray, $parentComments)
+    {
+        foreach($parentComments as $comment) {
+            $commentArray = $comment->getChildCommentsToArray($comment->id);
+            $arryNum = array_search($commentArray, $targetArray) + 1;
+            $childComments = $comment->getChildComments($comment->id);
+            $childCommentsArry = $comment->getChildCommentsToArray($comment->id);
+
+            if(!empty($childCommentsArry)) {
+                array_splice($targetArray, $arryNum, 0, [$childCommentsArry]);
+                \Log::debug(print_r($childCommentsArry, true));
+                $comment->addChildCommentsArray($childCommentsArry, $childComments);
+            }
+        }
+        return $targetArray;
+    }
+    
     // コメントを取得
     public function getComments($id)
     {
@@ -102,31 +120,6 @@ class Comment extends Model
         return $childCommentsArray;
     }
     
-    // 子供のコメント配列を親コメントの後ろに追加
-    public function addChildCommentsArray($targetArray, $parentComments)
-    {
-        foreach($parentComments as $comment) {
-            $commentArray = $comment->getChildCommentsToArray($comment->id);
-            $arryNum = array_search($commentArray, $targetArray) + 1;
-            $childCommentsArry = $comment->getChildCommentsToArray($comment->id);
-
-            if(!empty($childCommentsArry)) {
-                array_splice($targetArray, $arryNum, 0, [$childCommentsArry]);
-            }
-        }
-        return $targetArray;
-    }
-
-    // 配列に入れる順番を取得
-    public function checkIndex($target_array, $parentCommentArray)
-    {
-        $index = array_search($parentCommentArray, $target_array) + 1;
-
-        return $index;
-    }
-
-
-
     
     // コメントに関連するコメントを全て取得する
     public function getRelatedAllCommentsToArray($id)
