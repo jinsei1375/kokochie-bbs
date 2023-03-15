@@ -87,7 +87,7 @@
                                       <?php   
                                         var_dump($comment->getChildRelatedCommentsToArray($comment->id));
                                       ?>
-                                          
+                                      
                                     </li>
                                   @endif
                                     
