@@ -70,7 +70,12 @@ class Comment extends Model
     { 
         $onlyChildComments = collect();
         foreach($comments as $comment) {
-            $onlyChildComments->merge(Comment::getChildComments($comment->id));
+            if(Comment::getChildComments($comment->id)->isEmpty()) {
+                $childComments = Comment::getChildComments($comment->id);
+                foreach($childComments as $childComment) {
+                    $onlyChildComments->add($childComment);
+                }
+            }
         }
         return $onlyChildComments;
     }
